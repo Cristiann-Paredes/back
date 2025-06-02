@@ -1,25 +1,21 @@
-import express from 'express'
-import verificarAutenticacion from '../middlewares/autenticacion.js'
-import { validacionPlan } from '../middlewares/validacionPlan.js'
-
-import soloAdmin from '../middlewares/soloAdmin.js'
+import express from 'express';
+import verificarAutenticacion from '../middlewares/autenticacion.js';
+import soloAdmin from '../middlewares/soloAdmin.js';
+import { validacionPlan } from '../middlewares/validacionPlan.js';
 import {
   crearPlan,
   listarPlanes,
   detallePlan,
   actualizarPlan,
-  eliminarPlan
-} from '../controllers/plan_controller.js'
+  eliminarPlan,
+} from '../controllers/plan_controller.js';
 
-const router = express.Router()
+const router = express.Router();
 
-router.post('/planes', verificarAutenticacion, soloAdmin, validacionPlan, crearPlan)
-router.get('/planes', verificarAutenticacion, listarPlanes)
-router.get('/planes/:id', verificarAutenticacion, detallePlan)
-router.put('/planes/:id', verificarAutenticacion, soloAdmin, validacionPlan, actualizarPlan)
-router.delete('/planes/:id', verificarAutenticacion, soloAdmin, eliminarPlan)
+router.post('/planes', crearPlan);
+router.get('/planes', verificarAutenticacion, listarPlanes);
+router.get('/planes/:id', verificarAutenticacion, detallePlan);
+router.put('/planes/:id', verificarAutenticacion, soloAdmin, validacionPlan, actualizarPlan);
+router.delete('/planes/:id', verificarAutenticacion, soloAdmin, eliminarPlan);
 
-
-
-
-export default router
+export default router;

@@ -1,4 +1,4 @@
-import { check, body, validationResult } from 'express-validator'
+import { check, body, validationResult } from 'express-validator';
 
 export const validacionPlan = [
   check('nombre')
@@ -18,11 +18,14 @@ export const validacionPlan = [
   body('ejercicios.*.nombre')
     .notEmpty().withMessage('Cada ejercicio debe tener un nombre'),
 
+  body('imagenes').optional().isArray().withMessage('Las imágenes deben ser un arreglo'),
+  body('videos').optional().isArray().withMessage('Los videos deben ser un arreglo'),
+
   (req, res, next) => {
-    const errors = validationResult(req)
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() })
+      return res.status(400).json({ errors: errors.array() });
     }
-    next()
+    next();
   }
-]
+];

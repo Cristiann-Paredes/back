@@ -43,8 +43,74 @@ const verAsignacionesAdmin = async (req, res) => {
   res.status(200).json(asignaciones)
 }
 
+//eliminar asignacion
+const eliminarAsignacion = async (req, res) => {
+  const { id } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ msg: 'ID de asignación no válido' })
+  }
+
+  const asignacion = await Asignacion.findById(id)
+  if (!asignacion) {
+    return res.status(404).json({ msg: 'Asignación no encontrada' })
+  }
+  await asignacion.deleteOne()
+  res.status(200).json({ msg: 'Asignación eliminada correctamente' })
+}
+
+//actualizar asignacion
+const actualizarAsignacion = async (req, res) => {
+  const { id } = req.params
+  const { usuario, plan, observaciones, fechaFin } = req.body
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ msg: 'ID de asignación no válido' })
+  }
+
+  const asignacion = await Asignacion.findById(id)
+  if (!asignacion) {
+    return res.status(404).json({ msg: 'Asignación no encontrada' })
+  }
+  if (usuario) {
+    if (!mongoose.Types.ObjectId.isValid(usuario)) {
+      return res.status(400).json({ msg: 'ID de usuario no válido' })
+    }
+    const usuarioExiste = await Usuario.findById(usuario)
+    if (!usuarioExiste || usuarioExiste.rol !== 'cliente') {
+      return res.status(404).json({ msg: 'Usuario cliente no válido' })
+    }
+  }
+  if (plan) {
+    if (!mongoose.Types.ObjectId.isValid(plan)) {
+      return res.status(400).json({ msg: 'ID de plan no válido' })
+    }
+    const planExiste = await Plan.findById(plan)
+    if (!planExiste) {
+      return res.status(404).json({ msg: 'Plan no encontrado' })
+    }
+  }
+  if (observaciones) {
+    asignacion.observaciones = observaciones
+  }
+  if (fechaFin) {
+    asignacion.fechaFin = fechaFin
+  }
+  if (usuario) {
+    asignacion.usuario = usuario
+  }
+  if (plan) {
+    asignacion.plan = plan
+  }
+  await asignacion.save()
+  res.status(200).json({ msg: 'Asignación actualizada correctamente' })
+}
+
+
 export {
   asignarPlan,
   verAsignacionesCliente,
-  verAsignacionesAdmin
+  verAsignacionesAdmin, 
+  eliminarAsignacion,
+  actualizarAsignacion
 }

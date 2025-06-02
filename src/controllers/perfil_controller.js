@@ -2,33 +2,45 @@ import Usuario from '../models/Usuario.js'
 import bcrypt from 'bcryptjs'
 
 const verPerfil = async (req, res) => {
-  const usuario = req.usuario
-  delete usuario.password
-  delete usuario.token
-  delete usuario.__v
+  try {
+    const usuario = await Usuario.findById(req.usuario.id).select('-password -token -__v');
+    if (!usuario) return res.status(404).json({ msg: 'Usuario no encontrado' });
 
-  res.status(200).json(usuario)
-}
+    res.status(200).json({
+      nombre: usuario.nombre,
+      correo: usuario.correo,
+      rol: usuario.rol,
+      imagenPerfil: usuario.imagenPerfil,
+      estado: usuario.estado,
+      fechaInicio: usuario.fechaInicio,
+      fechaVencimiento: usuario.fechaVencimiento
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: 'Error al obtener el perfil' });
+  }
+};
 
 // Actualizar nombre/correo
 const actualizarPerfil = async (req, res) => {
-  const { nombre, correo } = req.body
-  const usuario = await Usuario.findById(req.usuario._id)
+  const { nombre, correo, imagenPerfil } = req.body;
 
-  if (!usuario) return res.status(404).json({ msg: 'Usuario no encontrado' })
+  try {
+    const usuario = await Usuario.findById(req.usuario.id);
+    if (!usuario) return res.status(404).json({ msg: 'Usuario no encontrado' });
 
-  // Si se quiere cambiar el correo, validar que no exista otro
-  if (correo && correo !== usuario.correo) {
-    const existeCorreo = await Usuario.findOne({ correo })
-    if (existeCorreo) return res.status(400).json({ msg: 'Ese correo ya está en uso' })
-    usuario.correo = correo
+    usuario.nombre = nombre || usuario.nombre;
+    usuario.correo = correo || usuario.correo;
+    usuario.imagenPerfil = imagenPerfil || usuario.imagenPerfil;
+
+    await usuario.save();
+    res.json({ msg: '✅ Perfil actualizado correctamente. Inicia sesion nuevamente.. ', usuario });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: '❌ Error al actualizar el perfil' });
   }
+};
 
-  usuario.nombre = nombre || usuario.nombre
-  await usuario.save()
-
-  res.status(200).json({ msg: 'Perfil actualizado correctamente' })
-}
 
 // Cambiar la contraseña
 const cambiarPassword = async (req, res) => {
@@ -46,8 +58,51 @@ const cambiarPassword = async (req, res) => {
   res.status(200).json({ msg: 'Contraseña actualizada correctamente' })
 }
 
+
+// Actualizar estado del cliente
+const actualizarEstadoCliente = async (req, res) => {
+  const { id } = req.params;
+  const { fechaInicio, fechaVencimiento } = req.body;
+
+  try {
+    const usuario = await Usuario.findById(id);
+    if (!usuario || usuario.rol !== 'cliente') {
+      return res.status(404).json({ msg: 'Cliente no encontrado' });
+    }
+
+    usuario.fechaInicio = fechaInicio || null;
+    usuario.fechaVencimiento = fechaVencimiento || null;
+
+    const hoy = new Date().toISOString().slice(0, 10);
+    usuario.estado = (fechaInicio && fechaVencimiento && hoy >= fechaInicio && hoy <= fechaVencimiento) ? true : false;
+
+    await usuario.save();
+
+    res.json({ msg: '✅ Estado y fechas actualizados correctamente', usuario });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: '❌ Error al actualizar estado' });
+  }
+};
+
+
+
+// Obtener todos los clientes
+const obtenerClientes = async (req, res) => {
+  try {
+    const clientes = await Usuario.find({ rol: 'cliente' }).select('nombre correo estado fechaInicio fechaVencimiento');
+    res.json(clientes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: '❌ Error al obtener clientes' });
+  }
+};
+
+
 export {
   verPerfil,
   actualizarPerfil,
-  cambiarPassword
+  cambiarPassword,
+  actualizarEstadoCliente,
+  obtenerClientes
 }

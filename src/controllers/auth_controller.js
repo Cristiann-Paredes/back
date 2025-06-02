@@ -4,6 +4,8 @@ import generarJWT from '../helpers/crearJWT.js'
 import { sendMailToUser, sendMailToRecoveryPassword } from '../config/nodemailer.js'
 
 
+
+
 const login = async (req, res) => {
   const { correo, password } = req.body
   const usuario = await Usuario.findOne({ correo })
@@ -20,20 +22,38 @@ const login = async (req, res) => {
 
 
 const registro = async (req, res) => {
-  const { correo, password } = req.body
-  const existe = await Usuario.findOne({ correo })
-  if (existe) return res.status(400).json({ msg: "El correo ya está registrado" })
+  const { nombre, correo, password, rol } = req.body
 
-  const nuevoUsuario = new Usuario(req.body)
-  nuevoUsuario.password = await nuevoUsuario.encrypPassword(password)
-  const token = nuevoUsuario.crearToken()
-  nuevoUsuario.token = token
-  await nuevoUsuario.save()
+  // Validar campos requeridos
+  if (!nombre || !correo || !password || !rol) {
+    return res.status(400).json({ msg: "Todos los campos son obligatorios" })
+  }
 
-  await sendMailToUser(correo, token)
-  res.status(201).json({ msg: "Usuario registrado, verifica tu cuenta por correo" })
+  try {
+    // Verificar si el correo ya está registrado
+    const existe = await Usuario.findOne({ correo })
+    if (existe) {
+      return res.status(400).json({ msg: "El correo ya está registrado" })
+    }
+
+    // Crear nuevo usuario
+    const nuevoUsuario = new Usuario({ nombre, correo, password, rol })
+    nuevoUsuario.password = await nuevoUsuario.encrypPassword(password) // Encriptar contraseña
+    const token = nuevoUsuario.crearToken() // Generar token para verificación
+    nuevoUsuario.token = token
+
+    await nuevoUsuario.save()
+
+    // Enviar correo de verificación
+    await sendMailToUser(correo, token)
+
+    // Responder al cliente
+    res.status(201).json({ msg: "Usuario registrado, verifica tu cuenta por correo" })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ msg: "Error al registrar el usuario", error: error.message })
+  }
 }
-
 
 
 
@@ -60,6 +80,7 @@ const recuperarPassword = async (req, res) => {
   await sendMailToRecoveryPassword(correo, token)
   res.status(200).json({ msg: "Correo enviado para restablecer la contraseña" })
 }
+
 
 const resetearPassword = async (req, res) => {
   const { token } = req.params

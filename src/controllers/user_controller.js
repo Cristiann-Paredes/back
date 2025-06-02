@@ -3,8 +3,12 @@ import mongoose from 'mongoose'
 
 // Listar solo clientes activos
 const listarClientes = async (req, res) => {
-  const clientes = await Usuario.find({ rol: 'cliente', estado: true }).select('-password -__v')
-  res.status(200).json(clientes)
+  try {
+    const clientes = await Usuario.find({ rol: 'cliente' }).select('-password -__v') // Elimina el filtro de estado
+    res.status(200).json(clientes)
+  } catch (error) {
+    res.status(500).json({ msg: 'Error al listar clientes' })
+  }
 }
 
 // Obtener detalle de un cliente
@@ -45,9 +49,28 @@ const cambiarEstadoCliente = async (req, res) => {
   res.status(200).json({ msg: `Cliente ${cliente.estado ? 'activado' : 'desactivado'}` })
 }
 
+// Eliminar cliente 
+const eliminarCliente = async (req, res) => {
+  const { id } = req.params
+  try {
+    const cliente = await Usuario.findById(id)
+    if (!cliente) {
+      return res.status(404).json({ msg: 'Cliente no encontrado' })
+    }
+
+    // Elimina el cliente
+    await Usuario.findByIdAndDelete(id) 
+    res.json({ msg: 'Cliente eliminado correctamente' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ msg: 'Error al eliminar el cliente' })
+  }
+}
+
 export {
   listarClientes,
   detalleCliente,
   actualizarCliente,
-  cambiarEstadoCliente
+  cambiarEstadoCliente,
+  eliminarCliente
 }

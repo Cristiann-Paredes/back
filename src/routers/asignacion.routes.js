@@ -4,13 +4,18 @@ import soloAdmin from '../middlewares/soloAdmin.js'
 import {
   asignarPlan,
   verAsignacionesCliente,
-  verAsignacionesAdmin
+  verAsignacionesAdmin,
+  actualizarAsignacion,
+  eliminarAsignacion
 } from '../controllers/asignacion_controller.js'
+
 
 const router = express.Router()
 
 router.post('/asignaciones', verificarAutenticacion, soloAdmin, asignarPlan)
 router.get('/asignaciones', verificarAutenticacion, soloAdmin, verAsignacionesAdmin)
 router.get('/mis-planes', verificarAutenticacion, verAsignacionesCliente)
+router.delete('/asignaciones/:id', verificarAutenticacion, soloAdmin, eliminarAsignacion)
+router.put('/asignaciones/:id', verificarAutenticacion, soloAdmin, actualizarAsignacion)
 
 export default router

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "lateral-store-461117-u1",
+  "private_key_id": "ab1d44447cc1efdb0032fd2a917859310c837fea",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCfGD1YeQwKhSKw\ntIMj/O6qu43AaKmQeRbw2vbgQc4z1U1iYCxQUnh29Z6socIc26pnnV6s5BXtE5dr\nvsPCAgvrBl0WWfl9dOTDam810d6I9c/m8RXmYWImEHSGIr1cK9QlrEocWBD1nnxl\nbuXDA23J8HbAgh5JWcGeAn/UL6qpWzGjUbTF6IjXgy+d1MpQw4/E4NEPv0dj+8kT\nA3FOkier0B4yEUEKenZPVldtnkwexJvg5gcUrjUreJ4CAuuvO3G+fm64aKo7/IjQ\nKJBuJmwYyPaSce907UcX1H71x0iER8adMJ0+yiSxpHf/Llfz7IN6MSNiOBTCpcCI\nNTwuaK45AgMBAAECggEARixf6qVBvWYp/f0xFu+aqi4eAS9pE3OFveknGZWNCWnd\nPzYida9auUXvnj+fKjFuAVP1jZbxYOfSU1EKcYmLjjf5WUGIfWDRAqzwrrGKUajy\n8e+G9F4h954sd3ndQkmGwrMy4TurB1vHjMoUiCb8ByWMi68ZAsuXTkXV8lawFRCU\nvZbNCX1vSfQXEDKZOfisT6E8S4bmtKqh5wTM8Pog6LkZe6bF/lJ4mMjZVcAVQka4\nIooUsGek2Bi5iQyYps6HJO2njCH5eRUfPYhx06WJSNNy7zovUyPGU0bR0EYTLfQ6\nTt0PNcJ+q1j68h6t5PRdBZHP3+Q0z7qyFTK0ktYB/QKBgQDa8Y9xHlfD8zLHPtY0\nWf3lRgAugpw6j1MZh8HgwQgiC8ZZxY68rzjjH/GA5p5lma3NJZr/Q1ZzO0XKywGl\niwNKXBcgtpWIPyE76vknLLx9r/fvr/NBuRlGei6oQWzawqXXLedQX1kpFTKvdExY\ncbQA5THiAqhdlJTlUtx6SeqNTwKBgQC6BYgcPiqOJkmvlFrTdHLFfq2E1S26dwoP\npLO1tu5w5iaizwoNW5Rn3ACB6XTup8TysYgpUM3XUaUPyrQ2O4kbWppq0UoQNFNF\nAfPFkcveyMYDHW4s0HGpUmfzxyNFBwZDL1oJli2qKfvjzygsPBH4EzJFURuSaRPg\nugLiBrB59wKBgBuH/qKZzy17umnlk+f3XP7ko4c1s1GFzkxKju2lOFGXq3SEbCN7\n4SpmTOcJmOdrwLgoP2pT3F4XGPqcNnPLnDlQhTP+4aTFU3eGX5g2fulLJGFGfc9I\n6E29dXqA56BGk7YQNqMbqkmJOdtoQ2VnvtvR9kjWTredxG9l0QWrn8vvAoGBAKVP\n/yqiMG1NJ1SqsaCTLt/F+OxACrhXy5AlXTNSk0mvrownFBbU2OkHgUfyMWFZpNPM\n42VcEuGUA+0pxccgV3MArJPa1EfcSFfeKUXdkGC26gmgoOWghDHmMs1YnkZcvLr+\nHLTCSmibkOddlKTi6VEdtiIVtzwAt5KRm7hEG5b3AoGBALc/1VPAFDrEATTMz2vj\n5FpYZnUKmKvKknPpWLr9jFTX3cdBEzw3DRzt0XKIDXQeYpU3ZeVZcvXgzfTzpejp\nsnuAi0u4B+eRnqWh0YxMtLDYCEFJflZ9TWocJJZOY7PODe3U4ESy2W6B74HkzTf9\nxxcN/uTtWB3tKGTilHkXf4hL\n-----END PRIVATE KEY-----\n",
+  "client_email": "oxgym-710@lateral-store-461117-u1.iam.gserviceaccount.com",
+  "client_id": "111556346391099550321",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/oxgym-710%40lateral-store-461117-u1.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
