@@ -6,7 +6,8 @@ import {
   verAsignacionesCliente,
   verAsignacionesAdmin,
   actualizarAsignacion,
-  eliminarAsignacion
+  eliminarAsignacion,
+  actualizarEjercicioEstado
 } from '../controllers/asignacion_controller.js'
 
 
@@ -17,5 +18,7 @@ router.get('/asignaciones', verificarAutenticacion, soloAdmin, verAsignacionesAd
 router.get('/mis-planes', verificarAutenticacion, verAsignacionesCliente)
 router.delete('/asignaciones/:id', verificarAutenticacion, soloAdmin, eliminarAsignacion)
 router.put('/asignaciones/:id', verificarAutenticacion, soloAdmin, actualizarAsignacion)
+router.patch('/asignaciones/:id/ejercicio', verificarAutenticacion, actualizarEjercicioEstado);
+
 
 export default router

@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 
 const verPerfil = async (req, res) => {
   try {
+    
     const usuario = await Usuario.findById(req.usuario.id).select('-password -token -__v');
     if (!usuario) return res.status(404).json({ msg: 'Usuario no encontrado' });
 

@@ -107,10 +107,35 @@ const actualizarAsignacion = async (req, res) => {
 }
 
 
+
+// Actualizar progreso de ejercicios por el cliente
+const actualizarEjercicioEstado = async (req, res) => {
+  const { id } = req.params;
+  const { idx, realizado, motivo } = req.body;
+
+  const asignacion = await Asignacion.findById(id);
+  if (!asignacion) return res.status(404).json({ msg: 'Asignación no encontrada' });
+
+  // Asegura que el array tenga la misma longitud que los ejercicios del plan
+  if (!asignacion.estadoEjercicios[idx]) {
+    asignacion.estadoEjercicios[idx] = { realizado: false, motivo: '' };
+  }
+
+  asignacion.estadoEjercicios[idx] = { realizado, motivo };
+  await asignacion.save();
+
+  res.status(200).json({ msg: 'Estado del ejercicio actualizado' });
+};
+
+
+
+
+
 export {
   asignarPlan,
   verAsignacionesCliente,
   verAsignacionesAdmin, 
   eliminarAsignacion,
-  actualizarAsignacion
+  actualizarAsignacion,
+  actualizarEjercicioEstado
 }

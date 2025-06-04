@@ -1,4 +1,9 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
+
+const ejercicioEstadoSchema = new mongoose.Schema({
+  realizado: { type: Boolean, default: false },
+  motivo: { type: String, default: '' }
+});
 
 const asignacionSchema = new mongoose.Schema({
   usuario: {
@@ -15,14 +20,13 @@ const asignacionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  fechaFin: {
-    type: Date  
-  },
-  observaciones: {
-    type: String,
-    default: ''
+  fechaFin: Date,
+  observaciones: String,
+  estadoEjercicios: {
+    type: [ejercicioEstadoSchema],
+    default: []
   }
-}, { timestamps: true })
+}, { timestamps: true });
 
-const Asignacion = mongoose.model('Asignacion', asignacionSchema)
-export default Asignacion
+const Asignacion = mongoose.model('Asignacion', asignacionSchema);
+export default Asignacion;
