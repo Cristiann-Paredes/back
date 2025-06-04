@@ -3,9 +3,17 @@ import bcrypt from 'bcryptjs'
 
 const verPerfil = async (req, res) => {
   try {
-    
     const usuario = await Usuario.findById(req.usuario.id).select('-password -token -__v');
     if (!usuario) return res.status(404).json({ msg: 'Usuario no encontrado' });
+
+    const hoy = new Date();
+    let diasRestantes = null;
+
+    if (usuario.fechaVencimiento) {
+      const vencimiento = new Date(usuario.fechaVencimiento);
+      const diferencia = vencimiento - hoy;
+      diasRestantes = Math.ceil(diferencia / (1000 * 60 * 60 * 24));
+    }
 
     res.status(200).json({
       nombre: usuario.nombre,
@@ -14,7 +22,8 @@ const verPerfil = async (req, res) => {
       imagenPerfil: usuario.imagenPerfil,
       estado: usuario.estado,
       fechaInicio: usuario.fechaInicio,
-      fechaVencimiento: usuario.fechaVencimiento
+      fechaVencimiento: usuario.fechaVencimiento,
+      diasRestantes    // dias para el cliente
     });
   } catch (error) {
     console.error(error);
