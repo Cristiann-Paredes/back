@@ -20,7 +20,7 @@ const asignacionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  fechaFin: Date,
+ 
   observaciones: String,
   estadoEjercicios: {
     type: [ejercicioEstadoSchema],

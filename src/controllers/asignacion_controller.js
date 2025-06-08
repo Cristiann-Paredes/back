@@ -3,8 +3,9 @@ import Usuario from '../models/Usuario.js'
 import Plan from '../models/Plan.js'
 import mongoose from 'mongoose'
 
+// Controlador para asignar un plan a un usuario cliente
 const asignarPlan = async (req, res) => {
-  const { usuario, plan, observaciones, fechaFin } = req.body
+  const { usuario, plan, observaciones } = req.body
 
   if (!mongoose.Types.ObjectId.isValid(usuario) || !mongoose.Types.ObjectId.isValid(plan)) {
     return res.status(400).json({ msg: 'ID de usuario o plan no válido' })
@@ -19,12 +20,12 @@ const asignarPlan = async (req, res) => {
   const yaAsignado = await Asignacion.findOne({ usuario, plan })
   if (yaAsignado) return res.status(400).json({ msg: 'Ese plan ya está asignado a este usuario' })
 
-  const nueva = new Asignacion({ usuario, plan, observaciones, fechaFin })
+  const nueva = new Asignacion({ usuario, plan, observaciones })
   await nueva.save()
   res.status(201).json({ msg: 'Plan asignado correctamente' })
 }
 
-
+// Controladores para ver asignaciones
 const verAsignacionesCliente = async (req, res) => {
   const usuarioId = req.usuario._id
 
@@ -62,7 +63,7 @@ const eliminarAsignacion = async (req, res) => {
 //actualizar asignacion
 const actualizarAsignacion = async (req, res) => {
   const { id } = req.params
-  const { usuario, plan, observaciones, fechaFin } = req.body
+  const { usuario, plan, observaciones } = req.body
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ msg: 'ID de asignación no válido' })
@@ -93,9 +94,9 @@ const actualizarAsignacion = async (req, res) => {
   if (observaciones) {
     asignacion.observaciones = observaciones
   }
-  if (fechaFin) {
-    asignacion.fechaFin = fechaFin
-  }
+  //if (fechaFin) {
+   // asignacion.fechaFin = fechaFin
+  //}
   if (usuario) {
     asignacion.usuario = usuario
   }
