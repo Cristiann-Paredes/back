@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 // Crear un plan
 const crearPlan = async (req, res) => {
   try {
-    const { nombre, descripcion, nivel, dia, ejercicios } = req.body;
+    const { nombre, descripcion, nivel, ejercicios } = req.body;
 
     let ejerciciosProcesados = [];
     if (typeof ejercicios === 'string') {
@@ -18,7 +18,6 @@ const crearPlan = async (req, res) => {
     const ejerciciosFinales = ejerciciosProcesados.map(ej => ({
       nombre: ej.nombre,
       repeticiones: ej.repeticiones,
-      dia: ej.dia || '', // opcional
       imagenURL: ej.imagenURL || '', // Se espera que venga del frontend
       videoURL: ej.videoURL || '',
     }));
@@ -27,7 +26,6 @@ const crearPlan = async (req, res) => {
       nombre,
       descripcion,
       nivel,
-      dia,
       ejercicios: ejerciciosFinales,
     });
 
@@ -59,6 +57,7 @@ const detallePlan = async (req, res) => {
   res.status(200).json(plan);
 };
 
+
 // Actualizar plan
 const actualizarPlan = async (req, res) => {
   try {
@@ -70,7 +69,7 @@ const actualizarPlan = async (req, res) => {
     const plan = await Plan.findById(id);
     if (!plan) return res.status(404).json({ msg: 'Plan no encontrado' });
 
-    const { nombre, descripcion, nivel, dia, ejercicios } = req.body;
+    const { nombre, descripcion, nivel, ejercicios } = req.body;
 
     let ejerciciosProcesados = [];
     if (typeof ejercicios === 'string') {
@@ -82,7 +81,6 @@ const actualizarPlan = async (req, res) => {
     const ejerciciosFinales = ejerciciosProcesados.map(ej => ({
       nombre: ej.nombre,
       repeticiones: ej.repeticiones,
-      dia: ej.dia || '',
       imagenURL: ej.imagenURL || '', // Usamos el que viene del frontend
       videoURL: ej.videoURL || '',
     }));
@@ -90,7 +88,6 @@ const actualizarPlan = async (req, res) => {
     plan.nombre = nombre;
     plan.descripcion = descripcion;
     plan.nivel = nivel;
-    plan.dia = dia;
     plan.ejercicios = ejerciciosFinales;
 
     await plan.save();

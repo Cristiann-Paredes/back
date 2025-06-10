@@ -35,6 +35,11 @@ const registro = async (req, res) => {
     if (existe) {
       return res.status(400).json({ msg: "El correo ya está registrado" })
     }
+    // verificar si existe el mismo nombre de usuario
+    const existeNombre = await Usuario.findOne({ nombre })
+    if (existeNombre) {
+      return res.status(400).json({ msg: "El nombre de usuario ya está en uso" })
+    }
 
     // Crear nuevo usuario
     const nuevoUsuario = new Usuario({ nombre, correo, password, rol })
