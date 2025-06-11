@@ -1,22 +1,19 @@
-//IMPORTAR MONGOS
 import mongoose from 'mongoose'
 
-
-//enn LA BDD
 mongoose.set('strictQuery', true)
 
-//CREAR UNA CONNECCTION
-const connection = async()=>{
-    try {
-        
-        const {connection} = await mongoose.connect(process.env.MONGODB_URI)
-        //PRESENTAR LA CONEXION EN LA CONSOLA
-        console.log(`Database is connected on ${connection.host} - ${connection.port}`)
-    } catch (error) {
-        //CAPTURAR EL ERROR DE LA CONEXION
-        console.log(error);
-    }
-}
+const conectarDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
+    console.log(`✅ Database connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error('❌ Error de conexión a MongoDB:', error.message);
+    process.exit(1); // salir si no conecta
+  }
+};
 
-export default  connection
+export default conectarDB;
