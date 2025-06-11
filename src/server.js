@@ -48,4 +48,8 @@ cron.schedule('0 0 * * 1', async () => {
   await reiniciarEjerciciosSemanales();
 });
 
+app.get('/env-check', (req, res) => {
+  res.send(process.env.MONGODB_URI ? 'MONGODB_URI está definida' : 'MONGODB_URI está VACÍA');
+});
+
 export default app;
