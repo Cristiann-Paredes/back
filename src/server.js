@@ -21,14 +21,14 @@ dotenv.config();
 app.set('port', process.env.PORT || 3000);
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: process.env.URL_FRONTEND,
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir archivos estáticos desde la carpeta "recursos"
-app.use('/recursos', express.static(path.join('src', 'recursos')));
-// Servir la carpeta recursos como pública
-app.use('/recursos', express.static(path.resolve('recursos')));
 
 // Rutas
 app.use('/api', routerAuth);
