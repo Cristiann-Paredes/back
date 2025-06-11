@@ -37,6 +37,11 @@ app.use('/api', routerAsignaciones);
 // Rutas no encontradas
 app.use((req, res) => res.status(404).send("Endpoint no encontrado - 404"));
 
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
+
+
 // Reinicio semanal
 cron.schedule('0 0 * * 1', async () => {
   console.log('🔁 Ejecutando reinicio semanal de ejercicios...');
