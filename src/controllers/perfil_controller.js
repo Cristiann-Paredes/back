@@ -39,17 +39,40 @@ const actualizarPerfil = async (req, res) => {
     const usuario = await Usuario.findById(req.usuario.id);
     if (!usuario) return res.status(404).json({ msg: 'Usuario no encontrado' });
 
-    usuario.nombre = nombre || usuario.nombre;
-    usuario.correo = correo || usuario.correo;
-    usuario.imagenPerfil = imagenPerfil || usuario.imagenPerfil;
+    // Validar si el nuevo nombre ya existe en otro usuario (ignorando el actual)
+    if (nombre && nombre !== usuario.nombre) {
+      const nombreEnUso = await Usuario.findOne({
+        nombre: nombre.toUpperCase(),
+        _id: { $ne: req.usuario.id }
+      });
+
+      if (nombreEnUso) {
+        return res.status(400).json({ msg: '❌ El nombre ya está en uso por otro usuario.' });
+      }
+
+      usuario.nombre = nombre.toUpperCase();
+    }
+
+    // Actualizar correo solo si es distinto
+    if (correo && correo !== usuario.correo) {
+      usuario.correo = correo;
+    }
+
+    // Actualizar imagen solo si es nueva
+    if (imagenPerfil) {
+      usuario.imagenPerfil = imagenPerfil;
+    }
 
     await usuario.save();
-    res.json({ msg: '✅ Perfil actualizado correctamente. Inicia sesion nuevamente.. ', usuario });
+
+    res.json({ msg: '✅ Perfil actualizado correctamente.', usuario });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: '❌ Error al actualizar el perfil' });
   }
 };
+
 
 
 // Cambiar la contraseña

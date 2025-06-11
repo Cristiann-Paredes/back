@@ -5,7 +5,7 @@ import { sendMailToUser, sendMailToRecoveryPassword } from '../config/nodemailer
 
 
 
-
+// Login 
 const login = async (req, res) => {
   const { correo, password } = req.body
   const usuario = await Usuario.findOne({ correo })
@@ -22,57 +22,63 @@ const login = async (req, res) => {
 
 
 const registro = async (req, res) => {
-  const { nombre, correo, password, rol } = req.body
+  let { nombre, correo, password, rol } = req.body;
 
   // Validar campos requeridos
   if (!nombre || !correo || !password || !rol) {
-    return res.status(400).json({ msg: "Todos los campos son obligatorios" })
+    return res.status(400).json({ msg: "Todos los campos son obligatorios" });
   }
+
+  // Limpiar nombre: solo letras con tildes, Ñ y espacios, convertir a mayúsculas
+  nombre = nombre.replace(/[^a-zA-ZÁÉÍÓÚÜÑáéíóúüñ\s]/g, '').toUpperCase();
 
   try {
-    // Verificar si el correo ya está registrado
-    const existe = await Usuario.findOne({ correo })
+    const existe = await Usuario.findOne({ correo });
     if (existe) {
-      return res.status(400).json({ msg: "El correo ya está registrado" })
+      return res.status(400).json({ msg: "El correo ya está registrado" });
     }
-    // verificar si existe el mismo nombre de usuario
-    const existeNombre = await Usuario.findOne({ nombre })
+
+    const existeNombre = await Usuario.findOne({ nombre });
     if (existeNombre) {
-      return res.status(400).json({ msg: "El nombre de usuario ya está en uso" })
+      return res.status(400).json({ msg: "El nombre de usuario ya está en uso" });
     }
 
-    // Crear nuevo usuario
-    const nuevoUsuario = new Usuario({ nombre, correo, password, rol })
-    nuevoUsuario.password = await nuevoUsuario.encrypPassword(password) // Encriptar contraseña
-    const token = nuevoUsuario.crearToken() // Generar token para verificación
-    nuevoUsuario.token = token
+    const nuevoUsuario = new Usuario({ nombre, correo, password, rol });
+    nuevoUsuario.password = await nuevoUsuario.encrypPassword(password);
+    const token = nuevoUsuario.crearToken();
+    nuevoUsuario.token = token;
 
-    await nuevoUsuario.save()
+    await nuevoUsuario.save();
+    await sendMailToUser(correo, token);
 
-    // Enviar correo de verificación
-    await sendMailToUser(correo, token)
-
-    // Responder al cliente
-    res.status(201).json({ msg: "Usuario registrado, verifica tu cuenta por correo" })
+    res.status(201).json({ msg: "Usuario registrado, verifica tu cuenta por correo" });
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ msg: "Error al registrar el usuario", error: error.message })
+    console.error(error);
+    res.status(500).json({ msg: "Error al registrar el usuario", error: error.message });
   }
-}
+};
 
 
 
+// Confirmar cuenta de usuario
 const confirmarCuenta = async (req, res) => {
-  const { token } = req.params
-  const usuario = await Usuario.findOne({ token })
-  if (!usuario) return res.status(404).json({ msg: "Token no válido" })
+  const { token } = req.params;
+  const usuario = await Usuario.findOne({ token });
 
-  usuario.token = null
-  usuario.confirmEmail = true
-  await usuario.save()
-  res.status(200).json({ msg: "Cuenta confirmada, ya puedes iniciar sesión" })
-}
+  if (!usuario) {
+    return res.redirect(`${process.env.URL_FRONTEND}/confirmacion-error`);
+  }
 
+  usuario.token = null;
+  usuario.confirmEmail = true;
+  await usuario.save();
+
+  return res.redirect(`${process.env.URL_FRONTEND}/confirmacion-exitosa`);
+};
+
+
+
+// Recuperar contraseña
 const recuperarPassword = async (req, res) => {
   const { correo } = req.body
   const usuario = await Usuario.findOne({ correo })
@@ -87,6 +93,7 @@ const recuperarPassword = async (req, res) => {
 }
 
 
+// Restablecer contraseña
 const resetearPassword = async (req, res) => {
   const { token } = req.params
   const { password, confirmar } = req.body
@@ -98,7 +105,7 @@ const resetearPassword = async (req, res) => {
   usuario.password = await usuario.encrypPassword(password)
   usuario.token = null
   await usuario.save()
-  res.status(200).json({ msg: "Contraseña actualizada correctamente" })
+  return res.redirect(`${process.env.URL_FRONTEND}/password-actualizada`);
 }
 
 export {

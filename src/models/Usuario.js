@@ -13,7 +13,7 @@ const usuarioSchema = new mongoose.Schema({
   password: { type: String, required: true },
   rol: { type: String, enum: ['admin', 'cliente'], default: 'cliente' },
   imagenPerfil: { type: String, default: '' },
-  estado: { type: Boolean, default: false },
+  estado: { type: Boolean, default: true },
   fechaInicio: { type: Date, default: null },
   fechaVencimiento: { type: Date, default: null },
   token: { type: String, default: null },
