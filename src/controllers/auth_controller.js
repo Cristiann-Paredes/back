@@ -20,16 +20,14 @@ const login = async (req, res) => {
   res.status(200).json({ token, nombre, rol, correo, _id })
 }
 
-
+// Registro de usuario
 const registro = async (req, res) => {
   let { nombre, correo, password, rol } = req.body;
 
-  // Validar campos requeridos
   if (!nombre || !correo || !password || !rol) {
     return res.status(400).json({ msg: "Todos los campos son obligatorios" });
   }
 
-  // Limpiar nombre: solo letras con tildes, Ñ y espacios, convertir a mayúsculas
   nombre = nombre.replace(/[^a-zA-ZÁÉÍÓÚÜÑáéíóúüñ\s]/g, '').toUpperCase();
 
   try {
@@ -51,12 +49,17 @@ const registro = async (req, res) => {
     await nuevoUsuario.save();
     await sendMailToUser(correo, token);
 
-    res.status(201).json({ msg: "Usuario registrado, verifica tu cuenta por correo" });
+    // ✅ AÑADIDO: devolvemos el ID del nuevo usuario
+    res.status(201).json({
+      msg: "Usuario registrado, verifica tu cuenta por correo",
+      cliente: { _id: nuevoUsuario._id }
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error al registrar el usuario", error: error.message });
   }
 };
+
 
 
 // Confirmar cuenta de usuario
