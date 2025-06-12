@@ -34,12 +34,14 @@ app.use('/api', routerPerfil);
 app.use('/api', routerPlanes);
 app.use('/api', routerAsignaciones);
 
-// Rutas no encontradas
-app.use((req, res) => res.status(404).send("Endpoint no encontrado - 404"));
-
+// ✅ Primero declara la ruta de prueba
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
+
+// Luego la de 404
+app.use((req, res) => res.status(404).send("Endpoint no encontrado - 404"));
+
 
 
 // Reinicio semanal
