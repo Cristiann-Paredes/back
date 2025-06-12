@@ -1,15 +1,16 @@
 import Usuario from '../models/Usuario.js'
 import mongoose from 'mongoose'
 
-// Listar solo clientes activos
+// Listar solo clientes confirmados y activos
 const listarClientes = async (req, res) => {
   try {
-    const clientes = await Usuario.find({ rol: 'cliente' }).select('-password -__v') // Elimina el filtro de estado
+    const clientes = await Usuario.find({ rol: 'cliente', confirmEmail: true }).select('-password -__v')
     res.status(200).json(clientes)
   } catch (error) {
     res.status(500).json({ msg: 'Error al listar clientes' })
   }
 }
+
 
 // Obtener detalle de un cliente
 const detalleCliente = async (req, res) => {
