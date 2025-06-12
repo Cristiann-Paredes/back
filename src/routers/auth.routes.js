@@ -18,7 +18,7 @@ router.get('/auth/confirmar/:token', confirmarCuenta)
 router.post('/auth/recuperar-password', recuperarPassword);
 
 // GET - Mostrar formulario al abrir enlace del correo
-router.get('/auth/recuperar-password/:token', async (req, res) => {
+router.get('/api/auth/recuperar-password/:token', async (req, res) => {
   const { token } = req.params;
 
   const usuario = await Usuario.findOne({ token });
@@ -133,7 +133,7 @@ router.get('/auth/recuperar-password/:token', async (req, res) => {
             <input type="password" name="confirmar" placeholder="Confirmar contraseña" required />
             <button type="submit">Actualizar contraseña</button>
           </form>
-          <a class="link" href="${process.env.URL_FRONTEND}/login">Volver al inicio de sesión</a>
+          <a class="link" href="${process.env.URL_FRONTEND}/login ">Volver al inicio de sesión</a>
         </div>
       </body>
     </html>
