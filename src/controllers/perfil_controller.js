@@ -123,13 +123,18 @@ const actualizarEstadoCliente = async (req, res) => {
 // Obtener todos los clientes
 const obtenerClientes = async (req, res) => {
   try {
-    const clientes = await Usuario.find({ rol: 'cliente' }).select('nombre correo estado fechaInicio fechaVencimiento');
+    const clientes = await Usuario.find({
+      rol: 'cliente',
+      confirmEmail: true   // ✅ Solo usuarios confirmados
+    }).select('nombre correo estado fechaInicio fechaVencimiento');
+
     res.json(clientes);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: '❌ Error al obtener clientes' });
   }
 };
+
 
 
 export {
