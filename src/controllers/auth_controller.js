@@ -28,7 +28,14 @@ const registro = async (req, res) => {
     return res.status(400).json({ msg: "Todos los campos son obligatorios" });
   }
 
+  // Limpiar nombre
   nombre = nombre.replace(/[^a-zA-ZÁÉÍÓÚÜÑáéíóúüñ\s]/g, '').toUpperCase();
+
+  // ✅ Validar formato de correo
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(correo)) {
+    return res.status(400).json({ msg: "Correo electrónico no válido" });
+  }
 
   try {
     const existe = await Usuario.findOne({ correo });
@@ -49,7 +56,6 @@ const registro = async (req, res) => {
     await nuevoUsuario.save();
     await sendMailToUser(correo, token);
 
-    // ✅ AÑADIDO: devolvemos el ID del nuevo usuario
     res.status(201).json({
       msg: "Usuario registrado, verifica tu cuenta por correo",
       cliente: { _id: nuevoUsuario._id }
@@ -59,6 +65,7 @@ const registro = async (req, res) => {
     res.status(500).json({ msg: "Error al registrar el usuario", error: error.message });
   }
 };
+
 
 
 
