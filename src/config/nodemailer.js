@@ -58,7 +58,7 @@ const sendMailToUser = (userMail, token) => {
 
 // Correo de recuperación de contraseña
 const sendMailToRecoveryPassword = async (userMail, token) => {
-  const link = `${process.env.URL_BACKEND}/auth/recuperar-password/${encodeURIComponent(token)}`; // ✅ Link al backend directo (sin /api)
+const link = `${process.env.URL_BACKEND}/api/auth/recuperar-password/${encodeURIComponent(token)}`;
 
   const html = baseTemplate(`
     <h2 style="color:#d32f2f;">Recupera tu contraseña</h2>
