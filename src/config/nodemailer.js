@@ -28,7 +28,8 @@ const baseTemplate = (content) => `
 
 // Correo de confirmación de cuenta
 const sendMailToUser = (userMail, token) => {
-const link = `${process.env.URL_BACKEND}/api/auth/confirmar/${encodeURIComponent(token)}`
+  const link = `${process.env.URL_BACKEND}/api/auth/confirmar/${encodeURIComponent(token)}`; // corregido
+
   const html = baseTemplate(`
     <h2 style="color:#d32f2f;">¡Bienvenido!</h2>
     <p>Gracias por registrarte en <b>Ox Gym</b>.</p>
@@ -55,28 +56,31 @@ const link = `${process.env.URL_BACKEND}/api/auth/confirmar/${encodeURIComponent
 };
 
 
+// Correo de recuperación de contraseña
+const sendMailToRecoveryPassword = async (userMail, token) => {
+  const link = `${process.env.URL_FRONTEND}/recuperar/${encodeURIComponent(token)}`;  // 👉 Cambiado a URL del frontend
 
-// Correo para recuperación de contraseña
-const sendMailToRecoveryPassword = async(userMail, token) => {
-    const html = baseTemplate(`
-      <h2 style="color:#d32f2f;">Recupera tu contraseña</h2>
-      <p>Recibimos una solicitud para restablecer tu contraseña en <b>Ox Gym</b>.</p>
-      <p>Haz clic en el botón para crear una nueva contraseña:</p>
-      <a href="${process.env.URL_BACKEND}auth/recuperar-password/${encodeURIComponent(token)}"
-         style="display:inline-block;padding:12px 24px;background:#1976d2;color:#fff;text-decoration:none;border-radius:5px;font-weight:bold;margin:20px 0;">
-        Reestablecer contraseña
-      </a>
-      <p>Si no solicitaste este cambio, puedes ignorar este correo.</p>
-    `);
+  const html = baseTemplate(`
+    <h2 style="color:#d32f2f;">Recupera tu contraseña</h2>
+    <p>Recibimos una solicitud para restablecer tu contraseña en <b>Ox Gym</b>.</p>
+    <p>Haz clic en el botón para crear una nueva contraseña:</p>
+    <a href="${link}"
+       style="display:inline-block;padding:12px 24px;background:#1976d2;color:#fff;text-decoration:none;border-radius:5px;font-weight:bold;margin:20px 0;">
+      Reestablecer contraseña
+    </a>
+    <p>Si no solicitaste este cambio, puedes ignorar este correo.</p>
+  `);
 
-    let info = await transporter.sendMail({
-        from: `"Ox Gym" <${process.env.USER_MAILTRAP}>`,
-        to: userMail,
-        subject: "Recupera tu contraseña en Ox Gym",
-        html
-    });
-    console.log("Mensaje enviado satisfactoriamente: ", info.messageId);
+  const info = await transporter.sendMail({
+    from: `"Ox Gym" <${process.env.USER_MAILTRAP}>`,
+    to: userMail,
+    subject: "Recupera tu contraseña en Ox Gym",
+    html
+  });
+
+  console.log("✅ Correo enviado satisfactoriamente:", info.messageId);
 };
+
 
 // Correo de bienvenida al cliente
 const sendMailToCliente = async(userMail, password) => {

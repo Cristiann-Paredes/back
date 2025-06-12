@@ -15,6 +15,7 @@ router.post('/auth/registro', registro)
 router.get('/auth/confirmar/:token', confirmarCuenta)
 
 router.post('/auth/recuperar-password', recuperarPassword)
+
 router.get('/auth/recuperar-password/:token', async (req, res) => {
   const { token } = req.params;
 
