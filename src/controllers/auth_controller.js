@@ -59,23 +59,30 @@ const registro = async (req, res) => {
 };
 
 
-
 // Confirmar cuenta de usuario
 const confirmarCuenta = async (req, res) => {
-  const { token } = req.params;
-  const usuario = await Usuario.findOne({ token });
+  try {
+    const { token } = req.params;
 
-  if (!usuario) {
+    const usuario = await Usuario.findOne({ token });
+
+    if (!usuario) {
+      // Token inválido
+      return res.redirect(`${process.env.URL_FRONTEND}/confirmacion-error`);
+    }
+
+    // Confirmar usuario
+    usuario.token = null;
+    usuario.confirmEmail = true;
+    await usuario.save();
+
+    // Redirigir al frontend
+    return res.redirect(`${process.env.URL_FRONTEND}/confirmacion-exitosa`);
+  } catch (error) {
+    console.error("Error confirmando cuenta:", error);
     return res.redirect(`${process.env.URL_FRONTEND}/confirmacion-error`);
   }
-
-  usuario.token = null;
-  usuario.confirmEmail = true;
-  await usuario.save();
-
-  return res.redirect(`${process.env.URL_FRONTEND}/confirmacion-exitosa`);
 };
-
 
 
 // Recuperar contraseña

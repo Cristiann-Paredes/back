@@ -28,7 +28,7 @@ const baseTemplate = (content) => `
 
 // Correo de confirmación de cuenta
 const sendMailToUser = (userMail, token) => {
-  const link = `${process.env.URL_BACKEND}auth/confirmar/${encodeURIComponent(token)}`
+const link = `${process.env.URL_BACKEND}/api/auth/confirmar/${encodeURIComponent(token)}`
   const html = baseTemplate(`
     <h2 style="color:#d32f2f;">¡Bienvenido!</h2>
     <p>Gracias por registrarte en <b>Ox Gym</b>.</p>
@@ -53,6 +53,7 @@ const sendMailToUser = (userMail, token) => {
     }
   });
 };
+
 
 
 // Correo para recuperación de contraseña
