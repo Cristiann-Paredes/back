@@ -3,6 +3,10 @@
 
 Este es el backend del sistema web **OxGym**, una plataforma de gestión de planes de entrenamiento desarrollada con Node.js, Express y MongoDB. Este servidor ofrece funcionalidades RESTful para el manejo de usuarios, planes, asignaciones y control de estado.
 
+Repositorio Frontend:  
+📧 **https://github.com/Cristiann-Paredes/frontend.git**
+
+
 ## 🚀 Tecnologías
 
 - Node.js
