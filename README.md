@@ -71,4 +71,4 @@ Recomendado para plataformas como **Render** o **Railway**:
 ## 📬 Contacto
 
 Si deseas colaborar o reportar errores:  
-📧 **tuemail@dominio.com**
+📧 **paredes30@hotmail.es**
