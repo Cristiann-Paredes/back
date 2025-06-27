@@ -43,7 +43,7 @@ UPLOADCARE_SECRET_KEY=sk_test_xxx
 
 ```bash
 # Clonar el proyecto
-git clone https://github.com/tuusuario/oxgym-backend.git
+git clone https://github.com/Cristiann-Paredes/back.git
 cd oxgym-backend
 
 # Instalar dependencias
