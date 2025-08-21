@@ -14,11 +14,10 @@ const crearPlan = async (req, res) => {
       ejerciciosProcesados = ejercicios;
     }
 
-    // No añadimos imágenes aquí. Las imágenes llegan desde el frontend.
     const ejerciciosFinales = ejerciciosProcesados.map(ej => ({
       nombre: ej.nombre,
       repeticiones: ej.repeticiones,
-      imagenURL: ej.imagenURL || '', // Se espera que venga del frontend
+      imagenURL: ej.imagenURL || '',
       videoURL: ej.videoURL || '',
     }));
 
@@ -34,6 +33,11 @@ const crearPlan = async (req, res) => {
 
   } catch (error) {
     console.error(error);
+
+    if (error.code === 11000 && error.keyPattern?.nivel) {
+      return res.status(400).json({ msg: `❌ Ya existe un plan con el nivel "${req.body.nivel}"` });
+    }
+
     res.status(500).json({ msg: '❌ Error al crear el plan', error: error.message });
   }
 };
@@ -116,3 +120,4 @@ export {
   actualizarPlan,
   eliminarPlan
 };
+
