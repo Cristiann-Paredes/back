@@ -1,9 +1,15 @@
+// models/Plan.js
 import mongoose from 'mongoose';
 
 const planSchema = new mongoose.Schema({
   nombre: { type: String, required: true, trim: true },
   descripcion: { type: String, required: true, trim: true },
-  nivel: { type: String, enum: ['básico', 'intermedio', 'avanzado'], default: 'básico' },
+  nivel: { 
+    type: String, 
+    enum: ['básico', 'intermedio', 'avanzado'], 
+    unique: true,  // 🔹 Ahora es único
+    required: true 
+  },
   ejercicios: [{
     nombre: { type: String, required: true },
     repeticiones: { type: String },
@@ -15,4 +21,5 @@ const planSchema = new mongoose.Schema({
 
 const Plan = mongoose.model('Plan', planSchema);
 export default Plan;
+
 
