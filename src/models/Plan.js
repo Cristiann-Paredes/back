@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const planSchema = new mongoose.Schema({
-  nombre: { type: String, required: true, trim: true, unique: true },
+  nombre: { type: String, required: true, trim: true },
   descripcion: { type: String, required: true, trim: true },
   nivel: { type: String, enum: ['básico', 'intermedio', 'avanzado'], default: 'básico' },
   ejercicios: [{
@@ -15,3 +15,4 @@ const planSchema = new mongoose.Schema({
 
 const Plan = mongoose.model('Plan', planSchema);
 export default Plan;
+
