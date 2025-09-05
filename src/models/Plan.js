@@ -7,7 +7,6 @@ const planSchema = new mongoose.Schema({
   nivel: { 
     type: String, 
     enum: ['básico', 'intermedio', 'avanzado'], 
-    unique: true,  // 🔹 Ahora es único
     required: true 
   },
   ejercicios: [{
@@ -21,5 +20,6 @@ const planSchema = new mongoose.Schema({
 
 const Plan = mongoose.model('Plan', planSchema);
 export default Plan;
+
 
 
